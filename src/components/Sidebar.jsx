@@ -1,27 +1,30 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { RiHomeFill } from "react-icons/ri";
-import { IoIosArrowForward } from "react-icons/io";
+import { AiOutlineLogout } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { googleLogout } from "@react-oauth/google";
+
+import { categories } from "../utils/data";
 
 import logo from "../assets/logo.png";
 
-const Sidebar = ({ user, closeToggle }) => {
-  const isNotActiveStyle =
-    "flex items-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize";
-  const isActiveStyle =
-    "flex items-center px-5 gap-3 font-extrabold border-r-2 border-black transition-all duration-200 ease-in-out capitalize";
+const isNotActiveStyle =
+  "flex items-center px-5 gap-3 text-gray-500 hover:text-black transition-all duration-200 ease-in-out capitalize";
+const isActiveStyle =
+  "flex items-center px-5 gap-3 font-extrabold border-r-2 border-black transition-all duration-200 ease-in-out capitalize";
 
-  const categories = [
-    { name: "Animals" },
-    { name: "Wallpapers" },
-    { name: "Photography" },
-    { name: "Gaming" },
-    { name: "Coding" },
-    { name: "Other" },
-  ];
+const Sidebar = ({ user, closeToggle }) => {
+  const navigate = useNavigate();
 
   const handleCloseSidebar = () => {
     if (closeToggle) closeToggle(false);
+  };
+
+  const logout = () => {
+    localStorage.clear();
+
+    navigate("/login");
   };
 
   return (
@@ -58,26 +61,50 @@ const Sidebar = ({ user, closeToggle }) => {
                 onClick={handleCloseSidebar}
                 key={category.name}
               >
+                <img
+                  src={category.image}
+                  alt="category"
+                  className="w-8 h-8 rounded-full shadow-sm"
+                />
                 {category.name}
               </NavLink>
             );
           })}
         </div>
       </div>
-      {user && (
-        <Link
-          to={`user-profile/${user._id}`}
-          className="flex my-5 mb-3 gap-2 p-2 items-center bg-white rounded-lg shadow-lg mx-3"
-          onClick={handleCloseSidebar}
-        >
-          <img
-            src={user.image}
-            alt="user-profile"
-            className="h-10 w-10 rounded-full"
-          />
-          <p>{user.userName}</p>
-        </Link>
-      )}
+      <div className="flex items-center my-5 mx-1 gap-2">
+        {user && (
+          <Link
+            to={`user-profile/${user._id}`}
+            className="flex gap-2 p-2 items-center bg-white rounded-lg shadow-lg mx-3"
+            onClick={handleCloseSidebar}
+          >
+            <img
+              src={user.image}
+              alt="user-profile"
+              className="h-10 w-10 rounded-full"
+            />
+            <p>{user.userName}</p>
+          </Link>
+        )}
+        <div>
+          {user?._id && (
+            <button
+              type="button"
+              onClick={() => {
+                googleLogout();
+                logout();
+              }}
+              className="bg-white p-2 rounded-full outline-none cursor-pointer shadow-md"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="Logout"
+            >
+              <AiOutlineLogout color="red" fontSize={21} />
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
