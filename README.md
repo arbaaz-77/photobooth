@@ -36,7 +36,7 @@ List the ready features here:
 
 
 ## Screenshots
-![Example screenshot](./screenshot.png)
+![Example screenshot](./photobooth.png)
 
 
 
