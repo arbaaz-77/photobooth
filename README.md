@@ -25,7 +25,7 @@ Photobooth allows users to sign in using Google auth, upload images, view other 
 
 
 ## Features
-List the ready features here:
+
 - Creating Pins
 - Viewing images per category
 - Downloading/saving images to your profile
